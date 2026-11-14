@@ -435,9 +435,10 @@ def start_panel() -> None:
                     apply_farm(farmfile.loads(up.getvalue()))
                 except (ValueError, KeyError, TypeError) as exc:
                     apply_farm(backup)
-                    st.error(f"Não foi possível abrir o arquivo: {exc}")
-                else:
-                    st.rerun()
+                    ss.farm_file_error = f"Não foi possível abrir o arquivo {up.name}: {exc}"
+                st.rerun()
+            if ss.get("farm_file_error"):
+                st.error(ss.pop("farm_file_error"))
         with b:
             st.markdown("🆕 **Cadastrar uma fazenda nova**")
             st.caption("Começa com tudo em branco. Os dados ficam só no seu navegador enquanto o site estiver aberto.")
