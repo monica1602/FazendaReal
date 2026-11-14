@@ -33,6 +33,9 @@ CACHE_DIR = Path(__file__).resolve().parent.parent / "data" / "cache"
 START_DATE = dt.date(2001, 1, 1)
 
 
+CACHE_MAX_AGE_DAYS = 30
+
+
 def _cache_path(lat: float, lon: float) -> Path:
     return CACHE_DIR / f"power_{lat:.2f}_{lon:.2f}.csv"
 
@@ -57,11 +60,13 @@ def fetch_daily(lat: float, lon: float, end: dt.date | None = None, use_cache: b
                 timeout: int = 120) -> tuple[pd.DataFrame, float, str]:
     """Retorna (dados diários, elevação em m, origem) para um ponto.
 
-    A origem é "API NASA POWER" ou "cache local". Em caso de falha de rede, usa o cache se existir.
+    A origem é "API NASA POWER" ou "cache local". O cache é renovado após CACHE_MAX_AGE_DAYS dias; em caso de
+    falha de rede, usa o cache se existir.
     """
     lat, lon = round(lat, 2), round(lon, 2)
     path = _cache_path(lat, lon)
-    if use_cache and path.exists():
+    fresh = path.exists() and (dt.datetime.now().timestamp() - path.stat().st_mtime) < CACHE_MAX_AGE_DAYS * 86400
+    if use_cache and fresh:
         df, elev = _parse_csv(path.read_text())
         return df, elev, f"cache local ({path.name})"
 
