@@ -164,6 +164,10 @@ def apply_farm(doc: dict) -> None:
         ss.custom_weights = {k: float(prio["pesos"].get(k, v)) for k, v in ss.custom_weights.items()}
 
 
+def farm_name() -> str:
+    return re.sub(r"[\\`*_#\[\]()<>|!~]", "", ss.prop_nome or "").strip()[:80] or "Minha fazenda"
+
+
 def farm_filename() -> str:
     slug = re.sub(r"[^a-z0-9]+", "_", farmfile._norm(ss.prop_nome or "fazenda")).strip("_") or "fazenda"
     return f"{slug}_{dt.date.today():%Y-%m-%d}.json"
@@ -399,7 +403,7 @@ with st.sidebar:
         st.markdown("**Nenhuma fazenda cadastrada**")
         st.caption("Comece na tela 1: informe a localização e os talhões.")
     else:
-        st.markdown(f"**{ss.prop_nome or 'Minha fazenda'}**")
+        st.markdown(f"**{farm_name()}**")
         loc = f"lat {ss.lat:.2f}, lon {ss.lon:.2f}" if ss.lat is not None else "sem localização"
         st.caption(f"{len(ss.talhoes)} talhões · {ss.talhoes['area_ha'].sum():.0f} ha · {loc}")
         if ss.exemplo:
@@ -1229,7 +1233,7 @@ def page_simulador() -> None:
 
 def build_report() -> tuple[str, pd.DataFrame]:
     df, meta = climate()
-    lines = [f"# Relatório RotaClima — {ss.prop_nome or 'Minha fazenda'}", "",
+    lines = [f"# Relatório RotaClima — {farm_name()}", "",
              f"Gerado em {dt.date.today():%d/%m/%Y}. Localização: lat {ss.lat:.4f}, lon {ss.lon:.4f}.", "",
              "## Dados utilizados", "",
              f"- NASA POWER (diário, comunidade AG): {meta['inicio']:%d/%m/%Y} a {meta['fim']:%d/%m/%Y} "
