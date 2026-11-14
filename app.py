@@ -454,8 +454,15 @@ def start_panel() -> None:
 
 
 def add_polygons(polys: list[tuple[str, list[tuple[float, float]]]]) -> None:
-    rows = []
+    rows, seen = [], set()
+    taken = set(ss.talhoes["nome"].astype(str))
     for name, poly in polys:
+        base, k = name, 2
+        while name in seen:
+            name, k = f"{base} ({k})", k + 1
+            while name in taken:
+                name, k = f"{base} ({k})", k + 1
+        seen.add(name)
         lat, lon, area = farmfile.polygon_stats(poly)
         ss.polygons[name] = poly
         rows.append({"nome": name, "lat": round(lat, 5), "lon": round(lon, 5), "area_ha": round(area, 1),
