@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 170">
+  <rect x="78" y="14" width="124" height="150" rx="10" fill="#FFFFFF"/>
+  <rect x="112" y="6" width="56" height="18" rx="6" fill="#FC3D21"/>
+  <g fill="#B0BEC5"><rect x="96" y="40" width="88" height="7" rx="3"/><rect x="96" y="54" width="64" height="7" rx="3"/></g>
+  <g><rect x="98" y="104" width="14" height="22" fill="#1E88E5"/><rect x="118" y="90" width="14" height="36" fill="#43A047"/><rect x="138" y="98" width="14" height="28" fill="#FFB300"/><rect x="158" y="80" width="14" height="46" fill="#FC3D21"/></g>
+  <polyline points="98,92 125,74 145,84 172,66" fill="none" stroke="#0B3D91" stroke-width="3"/>
+  <g stroke="#43A047" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M96 142 l6 6 l10 -12"/></g>
+  <rect x="120" y="140" width="62" height="7" rx="3" fill="#B0BEC5"/>
+  <g transform="translate(232 64)"><circle r="30" fill="none" stroke="#FFFFFF" stroke-width="3"/><ellipse rx="42" ry="12" fill="none" stroke="#FC3D21" stroke-width="3" transform="rotate(-25)"/><circle r="5" fill="#FFFFFF"/></g>
+  <g fill="#FFFFFF"><circle cx="30" cy="40" r="2"/><circle cx="50" cy="80" r="1.6"/><circle cx="22" cy="120" r="2.2"/><circle cx="258" cy="130" r="1.8"/><circle cx="240" cy="150" r="1.4"/></g>
+</svg>
