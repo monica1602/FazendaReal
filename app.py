@@ -89,6 +89,7 @@ def new_farm() -> None:
     ss.eco = reference_eco()
     ss.eco_ver = ss.get("eco_ver", 0) + 1
     ss.map_ver = ss.get("map_ver", 0) + 1
+    ss.farm_file_ver = ss.get("farm_file_ver", 0) + 1
 
 
 def load_preset(name: str) -> None:
@@ -421,15 +422,18 @@ def start_panel() -> None:
         st.markdown("**Como você quer começar?**")
         a, b, c = st.columns(3)
         with a:
-            up = st.file_uploader("📂 Abrir o arquivo da fazenda (.json)", type=["json"], key="farm_file",
+            up = st.file_uploader("📂 Abrir o arquivo da fazenda (.json)", type=["json"],
+                                  key=f"farm_file_{ss.get('farm_file_ver', 0)}",
                                   help="Arquivo salvo pelo botão 💾 em uma visita anterior.")
-            if up is not None and up.file_id != ss.get("farm_file_id"):
-                ss.farm_file_id = up.file_id
+            if up is not None:
+                backup = farm_state()
                 try:
                     apply_farm(farmfile.loads(up.getvalue()))
-                    st.rerun()
                 except (ValueError, KeyError, TypeError) as exc:
+                    apply_farm(backup)
                     st.error(f"Não foi possível abrir o arquivo: {exc}")
+                else:
+                    st.rerun()
         with b:
             st.markdown("🆕 **Cadastrar uma fazenda nova**")
             st.caption("Começa com tudo em branco. Os dados ficam só no seu navegador enquanto o site estiver aberto.")
