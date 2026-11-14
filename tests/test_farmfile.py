@@ -49,3 +49,7 @@ def test_textura_and_file_roundtrip():
             raise AssertionError("deveria falhar")
         except ValueError:
             pass
+
+
+def test_blank_crop_is_not_recognized():
+    assert farmfile.crop_key("") is None and farmfile.crop_key("  ") is None

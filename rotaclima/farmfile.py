@@ -26,6 +26,8 @@ def _norm(text: str) -> str:
 def crop_key(name: str) -> str | None:
     """Reconhece a cultura pelo nome ("Soja", "milho 2ª safra", "milho_2s"...)."""
     n = _norm(name)
+    if not n:
+        return None
     for k, c in CROPS.items():
         if n in (_norm(k), _norm(c.nome), _norm(c.nome.split("(")[0])):
             return k
