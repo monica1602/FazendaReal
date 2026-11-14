@@ -456,9 +456,12 @@ def add_polygons(polys: list[tuple[str, list[tuple[float, float]]]]) -> None:
         rows.append({"nome": name, "lat": round(lat, 5), "lon": round(lon, 5), "area_ha": round(area, 1),
                      "textura": "média", "ph": 5.5, "mo_pct": 2.0, "irrigado": False, "argila_pct": np.nan,
                      "verao_1": "soja", "segunda_1": "milho_2s", "verao_2": "soja", "segunda_2": "milho_2s"})
-    new = talhoes_frame(rows)
-    keep = ss.talhoes[~ss.talhoes["nome"].isin(new["nome"])]
-    ss.talhoes = pd.concat([keep, new], ignore_index=True) if not keep.empty else new
+    new = talhoes_frame(rows).set_index("nome")
+    tal = ss.talhoes.set_index("nome")
+    existing = new.index.intersection(tal.index)
+    tal.loc[existing, ["lat", "lon", "area_ha"]] = new.loc[existing, ["lat", "lon", "area_ha"]]
+    added = new.drop(existing)
+    ss.talhoes = (pd.concat([tal, added]) if not tal.empty else added).reset_index()
     if ss.lat is None:
         ss.lat, ss.lon = round(float(new["lat"].mean()), 4), round(float(new["lon"].mean()), 4)
     ss.talhoes_ver += 1
